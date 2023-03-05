@@ -1,0 +1,28 @@
+.Rooms {
+    padding: 0 20px;
+    display: flex;
+  }
+  
+  .Rooms .list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Rooms .PlayerList {
+    width: 250px;
+  }
+  
+  .Rooms .PlayerList button {
+    height: 40px;
+    width: 100%;
+  }
+  
+  .Rooms .RoomList {
+    padding-left: 20px;
+    flex: 1;
+  }
+  
+  .Rooms .RoomList .list {
+    text-align: left;
+  }
+  

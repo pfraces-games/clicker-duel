@@ -1,0 +1,50 @@
+.Room .end-game button {
+    height: 40px;
+    padding: 10px 20px;
+  }
+  
+  .Room .scoreboard {
+    height: 50px;
+    align-items: center;
+    background-color: lightgrey;
+  }
+  
+  .Room .scoreboard .player {
+    flex: 1;
+    padding: 0 10px;
+  }
+  
+  .Room .scoreboard .player:first-child {
+    text-align: right;
+    border-right: 1px solid black;
+  }
+  
+  .Room .scoreboard .player:last-child {
+    text-align: left;
+  }
+  
+  .Room .stats {
+    height: 50px;
+    align-items: center;
+  }
+  
+  .Room .stats > * {
+    flex: 1;
+  }
+  .Room .sidebar {
+    width: 30%;
+  }
+  
+  .Room .sidebar button {
+    height: 50px;
+  }
+  
+  .Room .main {
+    flex: 1;
+  }
+  
+  .Room .main button {
+    height: 100px;
+    flex: 1;
+  }
+  

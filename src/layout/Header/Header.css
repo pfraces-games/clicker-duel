@@ -1,0 +1,18 @@
+.Header {
+    height: 40px;
+    background-color: grey;
+  }
+  
+  .Header .page-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 10px;
+  }
+  
+  .Header h3,
+  .Header h4 {
+    margin: 0;
+  }
+  
