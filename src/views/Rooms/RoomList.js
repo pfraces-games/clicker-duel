@@ -26,7 +26,7 @@ export default function RoomList() {
       <div className="list">
         {rooms.map((room) => (
           <pre key={room.key}>
-            {JSON.stringify(mapObject(room.players, ({ name }) => name))}
+            {JSON.stringify(mapObject(room.stats, ({ name }) => name))}
           </pre>
         ))}
       </div>
