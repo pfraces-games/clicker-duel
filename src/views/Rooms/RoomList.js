@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { ref, onValue } from "firebase/database";
-import { db } from "../../db";
-import { mapObject } from "../../lib";
+import { useState, useEffect } from 'react';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../../db';
+import { mapObject } from '../../lib';
 
 export default function RoomList() {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    const roomsRef = ref(db, "rooms");
+    const roomsRef = ref(db, 'rooms');
 
     onValue(roomsRef, (data) => {
       const snapshot = data.val();
@@ -16,7 +16,7 @@ export default function RoomList() {
         return;
       }
 
-      setRooms(mapObject(snapshot, (value, key) => ({ key, ...value })));
+      setRooms(mapObject(snapshot, (value, key) => ({ ...value, key })));
     });
   }, []);
 

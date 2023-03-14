@@ -13,6 +13,7 @@ export default function Login() {
     const playersRef = ref(db, 'players');
     const userRef = push(playersRef);
     const loggedUser = { name: userName, key: userRef.key };
+
     set(userRef, loggedUser);
     setUser(() => loggedUser);
     navigate('/');

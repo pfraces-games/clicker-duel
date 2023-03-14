@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { ref, onValue, set, push } from "firebase/database";
-import { db } from "../../db";
-import { mapObject } from "../../lib";
+import { useState, useEffect } from 'react';
+import { ref, onValue, set, push } from 'firebase/database';
+import { db } from '../../db';
+import { mapObject } from '../../lib';
 
 export default function PlayerList({ user }) {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    const playersRef = ref(db, "players");
+    const playersRef = ref(db, 'players');
 
     onValue(playersRef, (data) => {
       const snapshot = data.val();
@@ -24,23 +24,15 @@ export default function PlayerList({ user }) {
     });
   }, []);
 
-  const onPlayerClick = (player) => {
-    const roomsRef = ref(db, "rooms");
+  const selectOpponent = (opponent) => {
+    const roomsRef = ref(db, 'rooms');
     const roomRef = push(roomsRef);
-    const roomPlayersRef = ref(db, `rooms/${roomRef.key}/players`);
+
     const userRef = ref(db, `players/${user.key}`);
-    const playerRef = ref(db, `players/${player.key}`);
+    const opponentRef = ref(db, `players/${opponent.key}`);
 
-    const newUser = { ...user, room: roomRef.key };
-    const newPlayer = { ...player, room: roomRef.key };
-
-    set(userRef, newUser);
-    set(playerRef, newPlayer);
-
-    set(roomPlayersRef, {
-      [user.key]: newUser,
-      [player.key]: newPlayer
-    });
+    set(userRef, { ...user, room: roomRef.key });
+    set(opponentRef, { ...opponent, room: roomRef.key });
   };
 
   return (
@@ -51,7 +43,7 @@ export default function PlayerList({ user }) {
           <button
             key={player.key}
             onClick={() => {
-              onPlayerClick(player);
+              selectOpponent(player);
             }}
           >
             {player.name}

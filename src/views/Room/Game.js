@@ -1,16 +1,12 @@
-import { useMemo } from 'react';
-import { throttle } from '../../lib';
+import useThrottle from './useThrottle';
+import useCountdown from './useCountdown';
 import Tool from './Tool';
 
 const config = {
   throttle: 200,
 };
 
-const useThrottle = (func, wait, deps) =>
-  useMemo(() => throttle(func, wait), deps);
-
 export default function Game({
-  countdown,
   self,
   setSelf,
   enemy,
@@ -18,6 +14,8 @@ export default function Game({
   onAttack,
   onBack,
 }) {
+  const countdown = useCountdown(5000);
+
   const forest = useThrottle(
     () => {
       setSelf((x) => ({

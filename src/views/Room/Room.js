@@ -31,27 +31,12 @@ export default function Room() {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const [countdown, setCountdown] = useState(5000);
   const [self, setSelf] = useState();
   const [enemy, setEnemy] = useState();
   const [combatlog, setCombatlog] = useState([]);
 
   const [selfRef, setSelfRef] = useState();
   const [enemyRef, setEnemyRef] = useState();
-
-  useEffect(() => {
-    const timeout = Date.now() + countdown;
-
-    const intervalId = setInterval(() => {
-      const timeleft = timeout - Date.now();
-      setCountdown(Math.round(timeleft / 1000));
-
-      if (timeleft < 0) {
-        setCountdown(0);
-        clearInterval(intervalId);
-      }
-    }, 200);
-  }, []);
 
   useEffect(() => {
     const roomStatsRef = ref(db, `rooms/${user.room}/stats`);
@@ -128,7 +113,6 @@ export default function Room() {
   return (
     <div className="Room">
       <Game
-        countdown={countdown}
         self={self}
         setSelf={sync(setSelf, selfRef)}
         enemy={enemy}
@@ -137,7 +121,7 @@ export default function Room() {
         onBack={onBack}
       />
 
-      <Combatlog combatlog={combatlog} enemy={enemy} />
+      <Combatlog events={combatlog} />
     </div>
   );
 }
