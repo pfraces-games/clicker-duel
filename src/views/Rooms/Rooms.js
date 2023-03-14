@@ -1,11 +1,21 @@
-import { useEffect } from "react";
-import { ref, onValue, off } from "firebase/database";
-import { db } from "../../db";
-import PlayerList from "./PlayerList";
-import RoomList from "./RoomList";
-import "./Rooms.css";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ref, onValue, off } from 'firebase/database';
+import { useUser } from '../../state/appStateHooks';
+import { db } from '../../db';
+import PlayerList from './PlayerList';
+import RoomList from './RoomList';
+import './Rooms.css';
 
-export default function Rooms({ user, onRoom }) {
+export default function Rooms() {
+  const navigate = useNavigate();
+  const { user, setUser } = useUser();
+
+  const onRoom = (room) => {
+    setUser((x) => ({ ...x, room }));
+    navigate(`/rooms/${room}`);
+  };
+
   useEffect(() => {
     const userRef = ref(db, `players/${user.key}`);
 

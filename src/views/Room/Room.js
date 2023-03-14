@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ref, push, set, off, onChildAdded, onValue } from "firebase/database";
-import Game from "./Game";
-import Combatlog from "./Combatlog";
-import { db } from "../../db";
-import "./Room.css";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ref, push, set, off, onChildAdded, onValue } from 'firebase/database';
+import { useUser } from '../../state/appStateHooks';
+import { db } from '../../db';
+import Game from './Game';
+import Combatlog from './Combatlog';
+import './Room.css';
 
 const initPlayer = () => ({
   wood: 100,
@@ -23,11 +24,12 @@ const initPlayer = () => ({
   sword: 1,
   swordXp: 0,
   shield: 1,
-  shieldXp: 0
+  shieldXp: 0,
 });
 
-export default function Room({ user }) {
+export default function Room() {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const [countdown, setCountdown] = useState(5000);
   const [self, setSelf] = useState();
@@ -114,13 +116,13 @@ export default function Room({ user }) {
   };
 
   if (!self || !enemy) {
-    return "Waiting for players...";
+    return 'Waiting for players...';
   }
 
   const onBack = () => {
     const userRef = ref(db, `players/${user.key}`);
     set(userRef, { ...user, room: null });
-    navigate("/rooms");
+    navigate('/rooms');
   };
 
   return (

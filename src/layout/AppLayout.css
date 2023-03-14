@@ -1,0 +1,35 @@
+.AppLayout .page-container {
+  box-sizing: border-box;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.AppLayout .row {
+  display: flex;
+}
+
+.AppLayout .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.AppLayout .modal {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AppLayout .modal .content {
+  box-sizing: border-box;
+  width: 400px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: white;
+}

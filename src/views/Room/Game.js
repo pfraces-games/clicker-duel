@@ -1,4 +1,13 @@
-import Tool from "./Tool";
+import { useMemo } from 'react';
+import { throttle } from '../../lib';
+import Tool from './Tool';
+
+const config = {
+  throttle: 200,
+};
+
+const useThrottle = (func, wait, deps) =>
+  useMemo(() => throttle(func, wait), deps);
 
 export default function Game({
   countdown,
@@ -7,57 +16,75 @@ export default function Game({
   enemy,
   setEnemy,
   onAttack,
-  onBack
+  onBack,
 }) {
-  const forest = () => {
-    setSelf((x) => ({
-      ...x,
-      wood: x.wood + x.axe
-    }));
-  };
-
-  const mountain = () => {
-    setSelf((x) => ({
-      ...x,
-      ore: x.ore + x.pick
-    }));
-  };
-
-  const farm = () => {
-    setSelf((x) => ({
-      ...x,
-      food: x.food + x.hoe
-    }));
-  };
-
-  const campfire = () => {
-    setSelf((x) => {
-      const incHp =
-        Math.round(x.hp) + x.knife <= x.maxHp
-          ? x.knife
-          : x.maxHp - Math.round(x.hp);
-      const incFood = x.food - x.knife <= 0 ? x.food : x.knife;
-      const inc = Math.min(incHp, incFood);
-
-      return {
+  const forest = useThrottle(
+    () => {
+      setSelf((x) => ({
         ...x,
-        hp: x.hp + inc,
-        food: x.food - inc
-      };
-    });
-  };
+        wood: x.wood + x.axe,
+      }));
+    },
+    config.throttle,
+    []
+  );
 
-  const dungeon = () => {};
+  const mountain = useThrottle(
+    () => {
+      setSelf((x) => ({
+        ...x,
+        ore: x.ore + x.pick,
+      }));
+    },
+    config.throttle,
+    []
+  );
 
-  const attack = () => {
-    const damage = (self.sword * self.sword) / (self.sword + enemy.shield);
-    onAttack(damage);
+  const farm = useThrottle(
+    () => {
+      setSelf((x) => ({
+        ...x,
+        food: x.food + x.hoe,
+      }));
+    },
+    config.throttle,
+    []
+  );
 
-    setEnemy((x) => ({
-      ...x,
-      hp: Math.max(x.hp - damage, 0)
-    }));
-  };
+  const campfire = useThrottle(
+    () => {
+      setSelf((x) => {
+        const hp = Math.round(x.hp);
+        const incHp = hp + x.knife <= x.maxHp ? x.knife : x.maxHp - hp;
+        const incFood = x.food - x.knife <= 0 ? x.food : x.knife;
+        const inc = Math.min(incHp, incFood);
+
+        return {
+          ...x,
+          hp: x.hp + inc,
+          food: x.food - inc,
+        };
+      });
+    },
+    config.throttle,
+    []
+  );
+
+  const dungeon = useThrottle(() => {}, config.throttle, []);
+
+  const attack = useThrottle(
+    () => {
+      const damage = (self.sword * self.sword) / (self.sword + enemy.shield);
+      onAttack(damage);
+
+      setEnemy((x) => ({
+        ...x,
+        hp: Math.max(x.hp - damage, 0),
+      }));
+    },
+    config.throttle,
+    [self.sword, enemy.shield]
+  );
 
   const updateAxe = () => {
     setSelf((x) =>
@@ -68,7 +95,7 @@ export default function Game({
             wood: x.wood - 2,
             ore: x.ore - 1,
             axeXp: x.axeXp + 1,
-            axe: x.axeXp + 1 >= x.axe * 10 ? x.axe + 1 : x.axe
+            axe: x.axeXp + 1 >= x.axe * 10 ? x.axe + 1 : x.axe,
           }
     );
   };
@@ -82,7 +109,7 @@ export default function Game({
             wood: x.wood - 1,
             ore: x.ore - 2,
             pickXp: x.pickXp + 1,
-            pick: x.pickXp + 1 >= x.pick * 10 ? x.pick + 1 : x.pick
+            pick: x.pickXp + 1 >= x.pick * 10 ? x.pick + 1 : x.pick,
           }
     );
   };
@@ -96,7 +123,7 @@ export default function Game({
             wood: x.wood - 2,
             ore: x.ore - 1,
             hoeXp: x.hoeXp + 1,
-            hoe: x.hoeXp + 1 >= x.hoe * 10 ? x.hoe + 1 : x.hoe
+            hoe: x.hoeXp + 1 >= x.hoe * 10 ? x.hoe + 1 : x.hoe,
           }
     );
   };
@@ -111,7 +138,7 @@ export default function Game({
             ore: x.ore - 1,
             food: x.food - 1,
             knifeXp: x.knifeXp + 1,
-            knife: x.knifeXp + 1 >= x.knife * 10 ? x.knife + 1 : x.knife
+            knife: x.knifeXp + 1 >= x.knife * 10 ? x.knife + 1 : x.knife,
           }
     );
   };
@@ -124,7 +151,7 @@ export default function Game({
             ...x,
             ore: x.ore - 3,
             swordXp: x.swordXp + 1,
-            sword: x.swordXp + 1 >= x.sword * 10 ? x.sword + 1 : x.sword
+            sword: x.swordXp + 1 >= x.sword * 10 ? x.sword + 1 : x.sword,
           }
     );
   };
@@ -137,7 +164,7 @@ export default function Game({
             ...x,
             wood: x.wood - 3,
             shieldXp: x.shieldXp + 1,
-            shield: x.shieldXp + 1 >= x.shield * 10 ? x.shield + 1 : x.shield
+            shield: x.shieldXp + 1 >= x.shield * 10 ? x.shield + 1 : x.shield,
           }
     );
   };
@@ -156,7 +183,7 @@ export default function Game({
       {(self.hp === 0 || enemy.hp === 0) && (
         <div className="end-game modal">
           <div className="content">
-            <h1>{self.hp === 0 ? "You loose" : "You win!"}</h1>
+            <h1>{self.hp === 0 ? 'You loose' : 'You win!'}</h1>
             <button onClick={onBack}>Back to rooms</button>
           </div>
         </div>
