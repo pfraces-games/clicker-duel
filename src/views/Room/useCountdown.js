@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 
 export default function useCountdown(initialCountdown) {
   const [countdown, setCountdown] = useState(initialCountdown);
+  const timeout = Date.now() + countdown * 1000;
 
   useEffect(() => {
-    const timeout = Date.now() + countdown;
-
     const intervalId = setInterval(() => {
       const timeleft = timeout - Date.now();
       setCountdown(Math.round(timeleft / 1000));
@@ -19,7 +18,7 @@ export default function useCountdown(initialCountdown) {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [timeout]);
 
   return countdown;
 }

@@ -6,15 +6,8 @@ const config = {
   throttle: 200,
 };
 
-export default function Game({
-  self,
-  setSelf,
-  enemy,
-  setEnemy,
-  onAttack,
-  onBack,
-}) {
-  const countdown = useCountdown(5000);
+export default function Game({ self, setSelf, enemy, onAttack, onBack }) {
+  const countdown = useCountdown(5);
 
   const forest = useThrottle(
     () => {
@@ -72,16 +65,10 @@ export default function Game({
 
   const attack = useThrottle(
     () => {
-      const damage = (self.sword * self.sword) / (self.sword + enemy.shield);
-      onAttack(damage);
-
-      setEnemy((x) => ({
-        ...x,
-        hp: Math.max(x.hp - damage, 0),
-      }));
+      onAttack(self.sword);
     },
     config.throttle,
-    [self.sword, enemy.shield]
+    [self.sword]
   );
 
   const updateAxe = () => {
